@@ -14,4 +14,12 @@ async function addUser({ displayName, email, password, image }) {
   return { code: 201, token };
 }
 
-module.exports = { addUser };
+async function getAllUsers() {
+  const data = await User.findAll({
+    attributes: { exclude: ['password'] },
+  });
+
+  return { code: 200, data };
+}
+
+module.exports = { addUser, getAllUsers };

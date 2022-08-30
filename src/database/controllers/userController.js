@@ -9,4 +9,10 @@ async function addUser(req, res) {
   return res.status(code).json({ token });
 }
 
-module.exports = { addUser };
+async function getAllUsers(_req, res) {
+  const { code, data } = await service.getAllUsers();
+
+  res.status(code).json(data);
+}
+
+module.exports = { addUser, getAllUsers };
