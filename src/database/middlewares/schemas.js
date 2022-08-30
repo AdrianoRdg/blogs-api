@@ -4,8 +4,15 @@ const loginSchema = Joi.object({
   email: Joi.string().required(), 
   password: Joi.string().required(),
 }).messages({
-  'any.required': '400|Some required fields are missing',
-  'string.empty': '400|Some required fields are missing',
+  'any.required': 'Some required fields are missing',
+  'string.empty': 'Some required fields are missing',
 });
 
-module.exports = { loginSchema };
+const userSchema = Joi.object({
+  displayName: Joi.string().min(8).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  image: Joi.string(),
+});
+
+module.exports = { loginSchema, userSchema };
