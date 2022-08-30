@@ -12,7 +12,17 @@ async function addUser(req, res) {
 async function getAllUsers(_req, res) {
   const { code, data } = await service.getAllUsers();
 
-  res.status(code).json(data);
+  return res.status(code).json(data);
 }
 
-module.exports = { addUser, getAllUsers };
+async function getUserById(req, res) {
+  const { id } = req.params;
+
+  const { message, code, data } = await service.getUserById(id);
+
+  if (message) res.status(code).json({ message });
+
+  return res.status(code).json(data);
+}
+
+module.exports = { addUser, getAllUsers, getUserById };

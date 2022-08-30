@@ -22,4 +22,12 @@ async function getAllUsers() {
   return { code: 200, data };
 }
 
-module.exports = { addUser, getAllUsers };
+async function getUserById(id) {
+  const data = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
+
+  if (!data) return { code: 404, message: 'User does not exist' };
+
+  return { code: 200, data };
+}
+
+module.exports = { addUser, getAllUsers, getUserById };
