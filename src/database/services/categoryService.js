@@ -7,4 +7,10 @@ async function addCategory(name) {
   return { code: 201, data: createdCategory };
 }
 
-module.exports = { addCategory };
+async function getAllCategories() {
+  const data = await Category.findAll();
+
+  return { code: 200, data };
+}
+
+module.exports = { addCategory, getAllCategories };
