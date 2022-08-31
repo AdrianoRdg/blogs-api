@@ -1,6 +1,6 @@
 const schemas = require('./schemas');
 
-async function validateLogin(req, res, next) {
+function validateLogin(req, res, next) {
   const data = req.body;
   const { error } = schemas.loginSchema.validate(data);
 
@@ -9,7 +9,7 @@ async function validateLogin(req, res, next) {
   next();
 }
 
-async function validateUser(req, res, next) {
+function validateUser(req, res, next) {
   const data = req.body;
   const { error } = schemas.userSchema.validate(data);
 
@@ -18,4 +18,14 @@ async function validateUser(req, res, next) {
   next();
 }
 
-module.exports = { validateLogin, validateUser };
+function validateCategory(req, res, next) {
+  const data = req.body;
+
+  const { error } = schemas.categorySchema.validate(data);
+
+  if (error) return res.status(400).json({ message: error.message });
+
+  next();
+}
+
+module.exports = { validateLogin, validateUser, validateCategory };
