@@ -5,7 +5,8 @@ async function validateToken(req, res, next) {
 
   try {
     if (!token) return res.status(401).json({ message: 'Token not found' });
-    verifyToken(token);
+    const { id } = verifyToken(token);
+    req.userId = id;
 
     next();
   } catch (error) {

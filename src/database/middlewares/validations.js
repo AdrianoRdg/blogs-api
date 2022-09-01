@@ -28,4 +28,14 @@ function validateCategory(req, res, next) {
   next();
 }
 
-module.exports = { validateLogin, validateUser, validateCategory };
+function validateBlogPost(req, res, next) {
+  const data = req.body;
+
+  const { error } = schemas.blogPostSchema.validate(data);
+  
+  if (error) return res.status(400).json({ message: error.message });
+  
+  next();
+}
+
+module.exports = { validateLogin, validateUser, validateCategory, validateBlogPost };
