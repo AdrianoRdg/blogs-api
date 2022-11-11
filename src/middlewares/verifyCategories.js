@@ -1,4 +1,4 @@
-const { Category } = require('../models');
+const { Category } = require('../database/models');
 
 async function verifyCategories(req, res, next) {
     const { categoryIds } = req.body;

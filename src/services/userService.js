@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User } = require('../database/models');
 const { createToken } = require('../helpers/token');
 
 async function addUser({ displayName, email, password, image }) {
@@ -23,7 +23,13 @@ async function getAllUsers() {
 }
 
 async function getUserById(id) {
-  const data = await User.findOne({ where: { id }, attributes: { exclude: ['password'] } });
+  const data = await User.findOne(
+    { where: { id },
+      attributes: {
+       exclude: ['password'], 
+    }, 
+  },
+);
 
   if (!data) return { code: 404, message: 'User does not exist' };
 

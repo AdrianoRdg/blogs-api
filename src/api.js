@@ -7,13 +7,13 @@ const app = express();
 app.use(express.json());
 
 // ...
-const validate = require('./database/middlewares/validations');
-const tokenValidation = require('./database/middlewares/validateToken');
-const loginController = require('./database/controllers/loginController');
-const userController = require('./database/controllers/userController');
-const categoryController = require('./database/controllers/categoryController');
-const blogPostController = require('./database/controllers/blogPostController');
-const verifyCategories = require('./database/middlewares/verifyCategories');
+const validate = require('./middlewares/validations');
+const tokenValidation = require('./middlewares/validateToken');
+const loginController = require('./controllers/loginController');
+const userController = require('./controllers/userController');
+const categoryController = require('./controllers/categoryController');
+const blogPostController = require('./controllers/blogPostController');
+const verifyCategories = require('./middlewares/verifyCategories');
 
 app.post('/login', validate.validateLogin, loginController.login);
 app.post('/user', validate.validateUser, userController.addUser);
@@ -26,6 +26,7 @@ app.get('/categories', tokenValidation.validateToken, categoryController.getAllC
 
 app.post('/post', tokenValidation.validateToken, validate.validateBlogPost,
   verifyCategories.verifyCategories, blogPostController.addBlogPost);
+app.get('/post', tokenValidation.validateToken, blogPostController.getBlogPosts);
 
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`

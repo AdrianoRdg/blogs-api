@@ -5,7 +5,14 @@ async function addBlogPost(req, res) {
     const { userId } = req;
     const { title, content, categoryIds } = req.body;
    
-    const { code, data } = await service.addBlogPost({ title, content, categoryIds, userId });
+    const { code, data } = await service.addBlogPost(
+      { 
+         title, 
+         content,
+         categoryIds,
+         userId,
+      },
+   );
     
     return res.status(code).json(data);
    } catch (error) {
@@ -14,4 +21,10 @@ async function addBlogPost(req, res) {
    }
 }
 
-module.exports = { addBlogPost };
+async function getBlogPosts(req, res) {
+   const { code, data } = await service.getBlogPosts();
+
+   return res.status(code).json(data);
+}
+
+module.exports = { addBlogPost, getBlogPosts };
