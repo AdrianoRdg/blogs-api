@@ -27,4 +27,32 @@ async function getBlogPosts(req, res) {
    return res.status(code).json(data);
 }
 
-module.exports = { addBlogPost, getBlogPosts };
+async function getBlogPostById(req, res) {
+   const { id } = req.params;
+   const { code, message, data } = await service.getBlogPostById(id);
+
+   if (message) {
+      return res.status(code).json({ message });
+   }
+
+   return res.status(code).json(data);
+}
+
+async function updateBlogPost(req, res) {
+   const { userId } = req;
+   const { id } = req.params;
+   const { title, content } = req.body;
+   const { code, message, data } = await service.updateBlogPost(
+      id,
+      userId,
+      { title, content },
+   );
+
+   if (message) {
+      return res.status(code).json({ message });
+   }
+
+   return res.status(code).json(data);
+}
+
+module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost };

@@ -27,6 +27,8 @@ app.get('/categories', tokenValidation.validateToken, categoryController.getAllC
 app.post('/post', tokenValidation.validateToken, validate.validateBlogPost,
   verifyCategories.verifyCategories, blogPostController.addBlogPost);
 app.get('/post', tokenValidation.validateToken, blogPostController.getBlogPosts);
+app.get('/post/:id', tokenValidation.validateToken, blogPostController.getBlogPostById);
+app.put('/post/:id', tokenValidation.validateToken, blogPostController.updateBlogPost);
 
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`

@@ -30,9 +30,7 @@ async function getBlogPosts() {
     { include: [
       { model: User, 
         as: 'user', 
-        attributes: { 
-          exclude: ['password'],
-        },
+        attributes: { exclude: ['password'] },
       },
       { model: Category,
           as: 'categories',
@@ -47,4 +45,49 @@ async function getBlogPosts() {
   return { code: 200, data: posts };
 }
 
-module.exports = { addBlogPost, getBlogPosts };
+async function getBlogPostById(id) {
+  const post = await BlogPost.findOne(
+    { include: [
+      { model: User, 
+        as: 'user',
+        where: { id },
+        attributes: { exclude: ['password'] },
+      },
+      { model: Category,
+          as: 'categories',
+          through: {
+          attributes: [],
+        },
+      },
+    ],
+    },
+  );
+
+  if (!post) return { code: 404, message: 'Post does not exist' };
+
+  return { code: 200, data: post };
+}
+
+async function updateBlogPost(id, userId, { title, content }) {
+  const getPost = await getBlogPostById(id);
+  if (getPost.message) return getPost;
+
+  if (getPost.data.userId !== userId) return { code: 401, message: 'Unauthorized user' };
+
+  if (!title || !content) return { code: 400, message: 'Some required fields are missing' };
+
+  await BlogPost.update(
+    {
+      title,
+      content,
+      updated: new Date(),
+    },
+    { where: { id } },
+  );
+  
+  const updatedPost = await getBlogPostById(id);
+
+  return { code: 200, data: updatedPost.data };
+}
+
+module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost };
