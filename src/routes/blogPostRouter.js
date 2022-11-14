@@ -6,6 +6,7 @@ const verify = require('../middlewares/verifyCategories');
 
 const bpRouter = Router();
 
+bpRouter.get('/search', auth.validateToken, blogPostController.searchBlogPost);
 bpRouter.post('/', auth.validateToken, mid.validateBlogPost, verify.verifyCategories,
   blogPostController.addBlogPost);
 bpRouter.get('/', auth.validateToken, blogPostController.getBlogPosts);

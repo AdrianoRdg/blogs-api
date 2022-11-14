@@ -82,4 +82,32 @@ async function deleteBlogPost(id, userId) {
   return { code: 204 };
 }
 
-module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost, deleteBlogPost };
+async function searchBlogPost(q) {
+  if (!q) return getBlogPosts();
+
+  const posts = await BlogPost.findAll(
+    { 
+      where: { [Sequelize.Op.or]: [
+        { title: { [Sequelize.Op.like]: `%${q}%` } },
+        { content: { [Sequelize.Op.like]: `%${q}%` } },
+      ] },
+      include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
+    },
+  );
+
+  if (!posts) return { code: 404, data: [] };
+
+  return { code: 200, data: posts };
+}
+
+module.exports = { 
+  addBlogPost, 
+  getBlogPosts, 
+  getBlogPostById,
+  updateBlogPost,
+  deleteBlogPost,
+  searchBlogPost,
+};
