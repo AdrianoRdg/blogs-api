@@ -36,4 +36,10 @@ async function getUserById(id) {
   return { code: 200, data };
 }
 
-module.exports = { addUser, getAllUsers, getUserById };
+async function deleteUser(userId) {
+  await User.destroy({ where: { id: userId } });
+
+  return { code: 204 };
+}
+
+module.exports = { addUser, getAllUsers, getUserById, deleteUser };
