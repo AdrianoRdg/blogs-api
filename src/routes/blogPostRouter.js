@@ -11,5 +11,6 @@ blogPostController.addBlogPost);
 bpRouter.get('/', auth.validateToken, blogPostController.getBlogPosts);
 bpRouter.get('/:id', auth.validateToken, blogPostController.getBlogPostById);
 bpRouter.put('/:id', auth.validateToken, blogPostController.updateBlogPost);
+bpRouter.delete('/:id', auth.validateToken, blogPostController.deleteBlogPost);
 
 module.exports = bpRouter;

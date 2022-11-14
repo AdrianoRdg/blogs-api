@@ -6,39 +6,32 @@ const sequelize = new Sequelize(config.development);
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 
 async function addBlogPost({ title, content, categoryIds, userId }) {
-    const newBlogPost = await sequelize.transaction(async (t) => {
+    const newBlogPost = await sequelize.transaction(async (transaction) => {
       const post = await BlogPost.create(
         { title, content, userId, updated: new Date(), published: new Date() }, 
-        { transaction: t },
+        { transaction },
         );
       
       await Promise.all(categoryIds.map(async (id) => PostCategory.create(
         { postId: post.id, categoryId: id },
-        { transaction: t },
+        { transaction },
       )));
 
       const newPost = {
          id: post.id, title, content, userId, updated: post.updated, published: post.published,
       };
-      return { code: 201, data: newPost };
+      return newPost;
     });
-    return newBlogPost;
+
+    return { code: 201, data: newBlogPost };
 }
 
 async function getBlogPosts() {
   const posts = await BlogPost.findAll(
     { include: [
-      { model: User, 
-        as: 'user', 
-        attributes: { exclude: ['password'] },
-      },
-      { model: Category,
-          as: 'categories',
-          through: {
-          attributes: [],
-        },
-      },
-    ],
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
     },
   );
 
@@ -47,19 +40,12 @@ async function getBlogPosts() {
 
 async function getBlogPostById(id) {
   const post = await BlogPost.findOne(
-    { include: [
-      { model: User, 
-        as: 'user',
-        where: { id },
-        attributes: { exclude: ['password'] },
-      },
-      { model: Category,
-          as: 'categories',
-          through: {
-          attributes: [],
-        },
-      },
-    ],
+    { 
+      where: { id },
+      include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+      ],
     },
   );
 
@@ -78,9 +64,7 @@ async function updateBlogPost(id, userId, { title, content }) {
 
   await BlogPost.update(
     {
-      title,
-      content,
-      updated: new Date(),
+      title, content, updated: new Date(),
     },
     { where: { id } },
   );
@@ -90,4 +74,15 @@ async function updateBlogPost(id, userId, { title, content }) {
   return { code: 200, data: updatedPost.data };
 }
 
-module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost };
+async function deleteBlogPost(id, userId) {
+  const getPost = await getBlogPostById(id);
+  if (getPost.message) return getPost;
+
+  if (getPost.data.userId !== userId) return { code: 401, message: 'Unauthorized user' };
+
+  await BlogPost.destroy({ where: { id } });
+
+  return { code: 204 };
+}
+
+module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost, deleteBlogPost };

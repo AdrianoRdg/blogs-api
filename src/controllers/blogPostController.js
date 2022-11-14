@@ -55,4 +55,16 @@ async function updateBlogPost(req, res) {
    return res.status(code).json(data);
 }
 
-module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost };
+async function deleteBlogPost(req, res) {
+   const { userId } = req;
+   const { id } = req.params;
+   const { code, message } = await service.deleteBlogPost(id, userId);
+
+   if (message) {
+      return res.status(code).json({ message });
+   }
+
+   return res.status(code).json();
+}
+
+module.exports = { addBlogPost, getBlogPosts, getBlogPostById, updateBlogPost, deleteBlogPost };
