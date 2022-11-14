@@ -7,7 +7,7 @@ const uRouter = Router();
 
 uRouter.post('/', mid.validateUser, userController.addUser);
 uRouter.get('/', auth.validateToken, userController.getAllUsers);
-uRouter.post('/:id', auth.validateToken, userController.getUserById);
+uRouter.get('/:id', auth.validateToken, userController.getUserById);
 uRouter.delete('/me', auth.validateToken, userController.deleteUser);
 
 module.exports = uRouter;
