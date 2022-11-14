@@ -4,16 +4,11 @@ async function addBlogPost(req, res) {
    try {
     const { userId } = req;
     const { title, content, categoryIds } = req.body;
-   
+
     const { code, data } = await service.addBlogPost(
-      { 
-         title, 
-         content,
-         categoryIds,
-         userId,
-      },
+      { title, content, categoryIds, userId },
    );
-    
+
     return res.status(code).json(data);
    } catch (error) {
     console.log('Algo deu errado no controller');

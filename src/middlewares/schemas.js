@@ -31,4 +31,12 @@ const blogPostSchema = Joi.object({
   'array.base': requireMessage,
 });
 
-module.exports = { loginSchema, userSchema, categorySchema, blogPostSchema };
+const updateBlogPostSchema = Joi.object({
+  title: Joi.string().required(), 
+  content: Joi.string().required(),
+}).messages({
+  'any.required': requireMessage,
+  'string.empty': requireMessage,
+});
+
+module.exports = { loginSchema, userSchema, categorySchema, blogPostSchema, updateBlogPostSchema };

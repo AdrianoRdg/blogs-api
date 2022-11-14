@@ -2,7 +2,6 @@ const Sequelize = require('sequelize');
 const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
-
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 
 async function addBlogPost({ title, content, categoryIds, userId }) {
@@ -10,7 +9,7 @@ async function addBlogPost({ title, content, categoryIds, userId }) {
       const post = await BlogPost.create(
         { title, content, userId, updated: new Date(), published: new Date() }, 
         { transaction },
-        );
+      );
       
       await Promise.all(categoryIds.map(async (id) => PostCategory.create(
         { postId: post.id, categoryId: id },
@@ -59,8 +58,6 @@ async function updateBlogPost(id, userId, { title, content }) {
   if (getPost.message) return getPost;
 
   if (getPost.data.userId !== userId) return { code: 401, message: 'Unauthorized user' };
-
-  if (!title || !content) return { code: 400, message: 'Some required fields are missing' };
 
   await BlogPost.update(
     {
