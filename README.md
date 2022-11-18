@@ -20,7 +20,7 @@ O projeto utiliza versão do Node 16 ou superior, porém pode ser executado via 
 Clone o projeto
 
 ```
-git@github.com:AdrianoRdg/store-manager.git
+git clone git@github.com:AdrianoRdg/store-manager.git
 
 ```
 
