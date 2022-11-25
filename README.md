@@ -20,14 +20,14 @@ O projeto utiliza versão do Node 16 ou superior, porém pode ser executado via 
 Clone o projeto
 
 ```
-git clone git@github.com:AdrianoRdg/store-manager.git
+git@github.com:AdrianoRdg/blogs-api.git
 
 ```
 
 Entre na pasta do projeto
 
 ```
-cd store-manager/
+cd blogs-api/
 ```
 
 Após realizar o clone, existem duas maneiras de rodar o projeto, via docker e localmente na maquina.
